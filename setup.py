@@ -19,7 +19,6 @@ setup(
         "Formalchemy>=1.2.3",
         "fa.jquery>=0.6",
     ],
-    setup_requires=["PasteScript>=1.6.3"],
     packages=find_packages(exclude=['ez_setup']),
     include_package_data=True,
     test_suite='nose.collector',
