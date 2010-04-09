@@ -5,6 +5,7 @@ dist
 eggs
 parts
 var/
+data/
 develop-eggs
 docs/_build/
 docs/modules/
@@ -14,4 +15,4 @@ docs/modules/
 *.pyc
 *.pyo
 *.log
-
+*.db

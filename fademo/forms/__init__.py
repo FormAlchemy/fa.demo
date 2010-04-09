@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from pylons import config, url
-from fademo import model
+from fademo.model import admin as model
 from fademo.lib.base import render
 from formalchemy import config as fa_config
 from formalchemy import templates
@@ -71,6 +71,8 @@ Permission = jqforms.Tabs('permissions',
         )
 del Permission.infos.groups
 
+Article = FieldSet(model.Article)
+Article.text.set(renderer=jq.RichTextFieldRenderer(use='tinymce'))
 ## Initialize grids
 
 UserGrid = Grid(model.User)
@@ -81,4 +83,6 @@ UserGrid.configure(include=[
     UserGrid.active,
 ])
 
+ArticleGrid = Grid(model.Article)
+ArticleGrid.configure(exclude=[Article.text])
 

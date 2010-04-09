@@ -26,6 +26,7 @@ if elixir.options_defaults.get('autoload', False) \
 from user import *
 # from upload import *
 from entities import *
+from demo import *
 
 # Finally, call elixir to set up the tables.
 # but not if using reflected tables

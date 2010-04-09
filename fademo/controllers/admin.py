@@ -2,7 +2,7 @@ import logging
 from fa.jquery.pylons import ModelsController
 from webhelpers.paginate import Page
 from fademo.lib.base import BaseController, render
-from fademo import model
+from fademo.model import admin as model
 from fademo import forms
 from fademo.model import meta
 from fademo.lib.decorators import authorize
