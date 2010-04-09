@@ -1,0 +1,3 @@
+include fademo/config/deployment.ini_tmpl
+recursive-include fademo/public *
+recursive-include fademo/templates *
