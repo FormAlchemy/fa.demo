@@ -104,7 +104,7 @@ pellentesque lacus interdum in. Vestibulum in nunc at nulla ultrices laoreet.
         widgets = demo.Widgets(
                 autocomplete=random.choice(['%sanux' % s for s in 'BCDFGHJKLMNP']+['']),
                 color = random.choice(["#EEEEEE", "#FFFF88", "#FF7400", "#CDEB8B", "#6BBA70"]),
-                slider = i,
+                slider = random.choice(range(0, 100, 10)),
                 )
         model.Session.add(widgets)
 
