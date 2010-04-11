@@ -28,12 +28,8 @@ def make_map(config):
     map.connect('upload', '/upload', controller='upload')
     map.connect('upload', '/upload/{path_info:.*}', controller='upload')
     # Index page
-    map.connect('admin', '/admin', controller='admin', action='models')
-    map.connect('formatted_admin', '/admin.json', controller='admin', action='models', format='json')
+    map.connect('admin', '/', controller='admin', action='models')
     # Models
-    map.resource('model', 'models', path_prefix='/admin/{model_name}', controller='admin', member={'confirm':'GET'}, collection={'lookup':'GET'})
-
-    map.connect('/{controller}/{action}')
-    map.connect('/{controller}/{action}/{id}')
+    map.resource('model', 'models', path_prefix='/{model_name}', controller='admin')
 
     return map
