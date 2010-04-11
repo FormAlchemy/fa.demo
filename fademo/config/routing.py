@@ -24,9 +24,6 @@ def make_map(config):
     # Map the /admin url to FA's AdminController
     # Map static files
     map.connect('fa_static', '/jquery/{path_info:.*}', controller='jquery')
-    # Uploads
-    map.connect('upload', '/upload', controller='upload')
-    map.connect('upload', '/upload/{path_info:.*}', controller='upload')
     # Index page
     map.connect('admin', '/', controller='admin', action='models')
     # Models

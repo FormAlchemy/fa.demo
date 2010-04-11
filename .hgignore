@@ -10,6 +10,7 @@ develop-eggs
 docs/_build/
 docs/modules/
 .installed.cfg
+paster.pid
 *.egg-info
 *.swp
 *.pyc
