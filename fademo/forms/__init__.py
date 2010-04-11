@@ -30,11 +30,7 @@ class Grid(tables.Grid):
 User = FieldSet(model.User)
 User.configure(
         exclude=[User.password_check],
-        options=[
-                 User.created.readonly(),
-                 User.groups.set(renderer=jq.checkboxset()),
-              ])
-
+        options=[User.created.readonly()])
 User = jq.Tabs('user',
             ('infos', 'Infos', User),
             ('groups', 'Groups', User.copy('groups')),
@@ -45,11 +41,8 @@ del User.infos.groups
 Group = FieldSet(model.Group)
 Group.configure(options=[
     Group.created.readonly(),
-    Group.users,
-    Group.permissions,
   ])
 Group.configure(options=[Group.created.readonly()])
-
 Group = jq.Tabs('groups',
             ('infos', 'Infos', Group),
             ('users', 'Users', Group.copy(Group.users)),
@@ -60,7 +53,6 @@ del Group.infos.permissions
 
 Permission = FieldSet(model.Permission)
 Permission.configure()
-
 Permission = jq.Tabs('permissions',
             ('infos', 'Infos', Permission),
             ('groups', 'Groups', Permission.copy(Permission.groups)),
