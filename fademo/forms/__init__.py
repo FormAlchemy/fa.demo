@@ -10,18 +10,14 @@ from formalchemy import forms
 from formalchemy import tables
 from formalchemy.ext.fsblob import FileFieldRenderer
 from formalchemy.ext.fsblob import ImageFieldRenderer
-from fa.jquery import renderers as jq
-from fa.jquery import forms as jqforms
+import fa.jquery as jq
 
 fa_config.encoding = 'utf-8'
+fa_config.engine = jq.TemplateEngine()
 
-class TemplateEngine(templates.TemplateEngine):
-    def render(self, name, **kwargs):
-        return render('/forms/%s.mako' % name, extra_vars=kwargs)
-fa_config.engine = TemplateEngine()
-
-# use jquery renderers
+## Use jquery renderers
 forms.FieldSet.default_renderers.update(jq.default_renderers)
+forms.FieldSet.default_renderers['dropdown'] = jq.relations()
 
 class FieldSet(forms.FieldSet):
     pass
@@ -39,7 +35,7 @@ User.configure(
                  User.groups.set(renderer=jq.checkboxset()),
               ])
 
-User = jqforms.Tabs('user',
+User = jq.Tabs('user',
             ('infos', 'Infos', User),
             ('groups', 'Groups', User.copy('groups')),
             )
@@ -54,7 +50,7 @@ Group.configure(options=[
   ])
 Group.configure(options=[Group.created.readonly()])
 
-Group = jqforms.Tabs('groups',
+Group = jq.Tabs('groups',
             ('infos', 'Infos', Group),
             ('users', 'Users', Group.copy(Group.users)),
             ('permissions', 'permissions', Group.copy(Group.permissions)),
@@ -65,14 +61,14 @@ del Group.infos.permissions
 Permission = FieldSet(model.Permission)
 Permission.configure()
 
-Permission = jqforms.Tabs('permissions',
+Permission = jq.Tabs('permissions',
             ('infos', 'Infos', Permission),
             ('groups', 'Groups', Permission.copy(Permission.groups)),
         )
 del Permission.infos.groups
 
 Article = FieldSet(model.Article)
-Article.text.set(renderer=jq.RichTextFieldRenderer(use='tinymce'))
+
 ## Initialize grids
 
 UserGrid = Grid(model.User)
@@ -82,7 +78,4 @@ UserGrid.configure(include=[
     UserGrid.groups,
     UserGrid.active,
 ])
-
-ArticleGrid = Grid(model.Article)
-ArticleGrid.configure(exclude=[Article.text])
 

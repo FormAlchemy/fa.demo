@@ -12,6 +12,7 @@ from pylons import config
 from elixir import *
 from fademo import model as model
 from fademo.model import user
+from fademo.model import demo
 
 def setup_app(command, conf, vars):
     """Place any commands to setup fademo here"""
@@ -22,37 +23,80 @@ def setup_app(command, conf, vars):
     import hashlib
     drop_all()
     model.metadata.create_all()
-    gadmin = model.user.Group(
-            name = "Administrators",
-            description = u"Administration group",
-            created = datetime.datetime.utcnow(),
-            active = True)
-    model.Session.add(gadmin)
-    # model.Session.commit()
-    # Check the status
-    g = model.Session.query(
-            model.user.Group).filter_by(
-                name="Administrators").all()
-    assert len(g) == 1
-    assert g[0] == gadmin
-    admin = model.user.User(
-                username = u"admin", 
-                password=hashlib.sha1("admin").hexdigest(),
-                password_check=hashlib.sha1("admin").hexdigest(), 
-                email="admin@example.com",
+    for name in (u'Administrators', u'Moderators', u'Users'):
+        g = model.user.Group(
+                name = name,
+                description = u"%s group" % name,
                 created = datetime.datetime.utcnow(),
                 active = True)
-    model.Session.add(admin)
-    gadmin.users.append(admin)
-    # model.Session.add(gadmin)
-    model.Session.commit()
-    # Check the status
-    u = model.Session.query(
-            model.user.User).filter_by(
-                username=u"admin").all()
-    assert len(u) == 1
-    assert u[0] == admin
-    # load fixtures
-    from fademo.lib.fixtures import lorem_ipsum_all
-    lorem_ipsum_all(30)
+        model.Session.add(g)
+    g = model.Session.query(
+            model.user.Group).filter_by(
+                name="Administrators").first()
+    ug = model.Session.query(
+            model.user.Group).filter_by(
+                name="Users").first()
+    for i, name in enumerate(('admin', 'bob', 'josette', 'bernard', 'gertrude', 'jacques', 'lise', 'robert', 'jacqueline')):
+        user = model.user.User(
+                    username = name.title(),
+                    password=hashlib.sha1(name).hexdigest(),
+                    password_check=hashlib.sha1(name).hexdigest(),
+                    email="%s@example.com" % name,
+                    created = datetime.datetime.utcnow(),
+                    active = True)
+        model.Session.add(user)
+        ug.users.append(user)
+        if i < 3:
+            g.users.append(user)
+
+    for i, name in enumerate(('read', 'write', 'admin')):
+        perm = model.user.Permission(
+                name = name.title(),
+                description = '%s permission' % name.title(),
+                )
+        model.Session.add(perm)
+        if i > 1:
+            g.permissions.append(perm)
+        else:
+            ug.permissions.append(perm)
+
+    for i in range(50):
+        article = demo.Article(
+                title='Article %s' % i,
+                text='''Heading
+=====================
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent consectetur
+imperdiet porta. Pellentesque habitant morbi tristique senectus et netus et
+malesuada fames ac turpis egestas. Proin sollicitudin, mi sit amet blandit
+dignissim, lacus ante sagittis est, in congue lectus nulla non urna. Nunc a
+justo ut lacus laoreet facilisis. Nullam blandit posuere mauris semper
+pellentesque. Sed leo neque, vulputate sed pharetra vel, rhoncus at nisl.
+Aenean eget nibh turpis. Quisque semper lacus sodales libero dictum pretium.
+Phasellus euismod, odio sit amet vehicula pharetra, nunc diam imperdiet dui,
+non malesuada neque erat ac augue. Sed elit ipsum, placerat vitae accumsan
+quis, tempor in tellus. Vestibulum tempus consequat libero, sit amet
+pellentesque lacus interdum in. Vestibulum in nunc at nulla ultrices laoreet.
+
+* Morbi id orci augue, porta malesuada mi.
+* Proin rhoncus tellus non orci iaculis pretium.
+* Praesent aliquet commodo urna, vitae laoreet arcu porttitor ut.
+* Nullam sollicitudin blandit risus, eu luctus nisl scelerisque eget.
+
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent consectetur
+imperdiet porta. Pellentesque habitant morbi tristique senectus et netus et
+malesuada fames ac turpis egestas. Proin sollicitudin, mi sit amet blandit
+dignissim, lacus ante sagittis est, in congue lectus nulla non urna. Nunc a
+justo ut lacus laoreet facilisis. Nullam blandit posuere mauris semper
+pellentesque. Sed leo neque, vulputate sed pharetra vel, rhoncus at nisl.
+Aenean eget nibh turpis. Quisque semper lacus sodales libero dictum pretium.
+Phasellus euismod, odio sit amet vehicula pharetra, nunc diam imperdiet dui,
+non malesuada neque erat ac augue. Sed elit ipsum, placerat vitae accumsan
+quis, tempor in tellus. Vestibulum tempus consequat libero, sit amet
+pellentesque lacus interdum in. Vestibulum in nunc at nulla ultrices laoreet.
+''',
+            publication_date = datetime.datetime.utcnow())
+        model.Session.add(article)
+
     model.Session.commit()
