@@ -67,7 +67,9 @@ Permission = jq.Tabs('permissions',
         )
 del Permission.infos.groups
 
-Article = FieldSet(model.Article)
+Widgets = FieldSet(model.Widgets)
+Widgets.configure()
+Widgets.autocomplete.set(renderer=jq.autocomplete(['%sanux' % s for s in 'BCDFGHJKLMNP']))
 
 ## Initialize grids
 

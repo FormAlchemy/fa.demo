@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """Setup the fatest application"""
 import logging
+import random
 
 import pylons.test
 
@@ -99,4 +100,13 @@ pellentesque lacus interdum in. Vestibulum in nunc at nulla ultrices laoreet.
             publication_date = datetime.datetime.utcnow())
         model.Session.add(article)
 
+    for i in range(100):
+        widgets = demo.Widgets(
+                autocomplete=random.choice(['%sanux' % s for s in 'BCDFGHJKLMNP']+['']),
+                color = random.choice(["#EEEEEE", "#FFFF88", "#FF7400", "#CDEB8B", "#6BBA70"]),
+                slider = i,
+                )
+        model.Session.add(widgets)
+
     model.Session.commit()
+
