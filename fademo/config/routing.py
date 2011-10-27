@@ -22,8 +22,6 @@ def make_map(config):
     # CUSTOM ROUTES HERE
 
     # Map the /admin url to FA's AdminController
-    # Map static files
-    map.connect('fa_static', '/jquery/{path_info:.*}', controller='jquery')
     # Index page
     map.connect('admin', '/', controller='admin', action='models')
     # Models
