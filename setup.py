@@ -15,9 +15,10 @@ setup(
     author_email='',
     #url='',
     install_requires=[
-        "Pylons==dev,>=0.9.7", 
+        "Pylons>=0.9.7", 
         "Formalchemy>=1.2.3",
         "fa.jquery>=0.6",
+        "fanstatic",
     ],
     packages=find_packages(exclude=['ez_setup']),
     include_package_data=True,
